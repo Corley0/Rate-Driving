@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for post in posts %}
+    <div>
+        <h1>{{ post.plate }}</h1>
+        <p>{{ post.author.username }}</p>
+        <p>{{ post.body }}</p>
+        <p>{{ post.rating }} / 5</p>
+    </div>
+    {% endfor %}
+{% endblock %}
