@@ -3,3 +3,4 @@ python-dotenv
 flask-wtf
 wtforms[email]
 flask-login
+Werkzeug

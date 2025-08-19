@@ -1,10 +1,14 @@
 import sqlite3
 from datetime import datetime
-#from flask_login import UserMixin
+from app import login
+from flask_login import UserMixin
 
 DB_PATH = 'app.db'
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
+
+
+def get_connection():
+    conn = sqlite3.connect(DB_PATH)
+    return conn
 
 def get_timestamp():
     now = datetime.now()
@@ -12,6 +16,8 @@ def get_timestamp():
     return int(timestamp)
 
 def create_db():
+    conn = get_connection()
+    cursor = conn.cursor()
     # Create users table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
@@ -54,8 +60,49 @@ def create_db():
     conn.commit()
 
 def add_user(username: str, email: str, password: str, permission_level: int = 1):
-    cursor.execute('''
-    INSERT INTO users (username, email, password, creation_timestamp, permission_level)
-    VALUES (?, ?, ?, ?, ?)
-''', (username, email, password, get_timestamp(), permission_level))
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO users (username, email, password, creation_timestamp, permission_level) VALUES (?, ?, ?, ?, ?)', (username, email, password, get_timestamp(), permission_level))
     conn.commit()
+
+def user_exists(username, email):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT 1 FROM users WHERE username = ? OR email = ?", (username, email))
+    exists = cursor.fetchone() is not None
+    conn.close()
+    return exists
+
+
+class User(UserMixin):
+    def __init__(self, id, email, password):
+        self.id = str(id)
+        self.email = email
+        self.password = password
+        self.authenticated = False
+    
+    def is_active(self):
+        return self.is_active()
+    
+    def is_anonymous(self):
+        return self.is_anonymous()
+    
+    def is_authenticated(self):
+        return self.authenticated
+    
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+@login.user_loader
+def load_user(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_id, email, password FROM users WHERE user_id = (?)",[id])
+    data = cursor.fetchone()
+    if data is None:
+        return None
+    else:
+        return User(int(data[0]), data[1], data[2])
