@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-<header>
-    <link href="static/forms.css" rel="stylesheet">
-</header>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+{% endblock %}
 
 {% block content %}
     <h1>Create a review</h1>

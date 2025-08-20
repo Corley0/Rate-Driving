@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, NumberRange
 
 class LoginForm(FlaskForm):
@@ -24,3 +24,10 @@ class CreatePostForm(FlaskForm):
 class SearchForm(FlaskForm):
     search_input = StringField('Search', validators=[DataRequired("Field must not be empty"),Length(min=7,max=7, message="Must be a UK license plate")])
     submit = SubmitField('🔍')
+
+class PunishForm(FlaskForm):
+    PUNISH_TYPES = ['Delete Account', 'Delete Post', 'Promote', 'Demote']
+    id = IntegerField('ID', validators=[DataRequired("Field must not be empty")])
+    punish_type = SelectField('Punishments', choices=PUNISH_TYPES, validators=[DataRequired("Field must not be empty")])
+    punish_type.choices = PUNISH_TYPES
+    submit = SubmitField('Submit')

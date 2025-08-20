@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app
-from app.forms import LoginForm, SignupForm, CreatePostForm, SearchForm
+from app.forms import LoginForm, SignupForm, CreatePostForm, SearchForm, PunishForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.database import User, load_user, add_user, get_connection, user_exists, add_post
+from app.database import User, load_user, add_user, get_connection, user_exists, add_post, remove_post, remove_account, update_permissions
 import sqlite3
 
 # http://38.58.180.142:3024/
@@ -96,7 +96,7 @@ def profile():
     user_id = current_user.id
     return redirect(url_for('users', user_id=user_id))
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/action/search', methods=['GET', 'POST'])
 def search():
     form = SearchForm()
     if form.validate_on_submit():
@@ -104,6 +104,61 @@ def search():
     else:
         plate = request.args.get('search_input', '')
     return redirect(url_for('plates', plate=plate))
+
+@app.route('/actions/delete/<review_id>')
+@login_required
+def delete(review_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM reviews WHERE review_id = (?)", (review_id,))
+    review_data = cursor.fetchone()
+    cursor.execute("SELECT * FROM users WHERE user_id = (?)", (current_user.id,))
+    user_data = cursor.fetchone()
+    
+    if review_data is None:
+        flash("Review not found.")
+        conn.close()
+        return redirect(url_for("index"))
+    
+    if not current_user.is_authenticated:
+        flash("Login to delete reviews")
+        conn.close()
+        return redirect(url_for("index"))
+        
+    
+    if (int(current_user.id) == review_data[1]) or (user_data[5] >= 2):
+        remove_post(review_id)
+        flash(f"Review Deleted: {review_data[2]}")
+    else:
+        flash(f"You do not have permission to delete review for {review_data[2]}")
+
+    conn.close()
+    return redirect(url_for('index'))
+
+@app.route('/admin', methods=["GET", "POST"])
+@login_required
+def admin():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE user_id = (?)", (current_user.id,))
+    user_data = cursor.fetchone()
+
+    if user_data[5] >= 2:
+        form = PunishForm()
+        if form.validate_on_submit():
+            if form.punish_type.data == "Delete Post":
+                remove_post(form.id.data )
+            elif form.punish_type.data == "Delete Account":
+                remove_account(form.id.data )
+            elif form.punish_type.data == "Demote":
+                update_permissions(form.id.data, -1)
+            elif form.punish_type.data == "Promote":
+                update_permissions(form.id.data, 1)
+        return render_template('admin.html', user_data=user_data, form=form)
+    else:
+        return redirect(url_for('index'))
+
 
 
 

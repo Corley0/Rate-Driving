@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+{% endblock %}
+
+{% block content %}
+    <a href="https://trello.com/b/ifOJFGJG/rate-driving-website">Trello Board</a>
+    <form action="" method="post" novalidate, class="punishments">
+        {{ form.hidden_tag() }}
+        <ul>
+            <li>
+                {{ form.id.label }}
+                {{ form.id(size=32) }}
+                {% for error in form.id.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </li>
+            <li>
+                {{ form.punish_type.label }}
+                {{ form.punish_type() }}
+                {% for error in form.punish_type.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </li>
+            <li>{{ form.submit() }}</li>
+        </ul>
+    </form>
+{% endblock %}

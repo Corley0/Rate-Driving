@@ -73,6 +73,26 @@ def add_post(author_id: int, plate: str, description: str, rating: int):
     cursor.execute('INSERT INTO reviews (author_id, plate, description, rating, creation_timestamp) VALUES (?, ?, ?, ?, ?)', (author_id, plate, description, rating, get_timestamp()))
     conn.commit()
 
+def update_permissions(user_id: int, amount: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT permission_level FROM users WHERE user_id = (?)", (user_id,))
+    current_perms = cursor.fetchone()[0]
+    cursor.execute('UPDATE users SET permission_level = ? WHERE user_id = ?', (current_perms+amount, user_id))
+    conn.commit()
+
+def remove_account(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM users WHERE user_id = (?)", (user_id,))
+    conn.commit()
+
+def remove_post(review_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM reviews WHERE review_id = (?)", (review_id,))
+    conn.commit()
+
 def user_exists(username, email):
     conn = get_connection()
     cursor = conn.cursor()

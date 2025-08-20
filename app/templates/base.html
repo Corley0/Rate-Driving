@@ -6,11 +6,8 @@
         {% else %}
             <title>Rate Driving</title>
         {% endif %}
-        <link href="static/global.css" rel="stylesheet">
-
-        {% if stylesheet %}
-            <link href="static/{{ stylesheet }}.css" rel="stylesheet">
-        {% endif %}
+        <link href="{{ url_for('static', filename='global.css') }}" rel="stylesheet">
+        {% block head %}{% endblock %}
     </head>
     <body>
         <div class="navbar">
@@ -37,7 +34,7 @@
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
+        <ul class="flashed_messages">
             {% for message in messages %}
             <li>{{ message }}</li>
             {% endfor %}
