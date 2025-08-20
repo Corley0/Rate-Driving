@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User: {{user_data[1]}}</h1>
+    <hr>
+    {% for review in reviews %}
+    <div>
+        <h1>Plate: {{ review[2] }}</h1>
+        <p>Description: {{ review[3] }}</p>
+        <p>Review: {{ review[4] }} / 5</p>
+    </div>
+    <hr>
+    {% endfor %}
+{% endblock %}

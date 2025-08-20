@@ -65,6 +65,12 @@ def add_user(username: str, email: str, password: str, permission_level: int = 1
     cursor.execute('INSERT INTO users (username, email, password, creation_timestamp, permission_level) VALUES (?, ?, ?, ?, ?)', (username, email, password, get_timestamp(), permission_level))
     conn.commit()
 
+def add_post(author_id: int, plate: str, description: str, rating: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO reviews (author_id, plate, description, rating, creation_timestamp) VALUES (?, ?, ?, ?, ?)', (author_id, plate, description, rating, get_timestamp()))
+    conn.commit()
+
 def user_exists(username, email):
     conn = get_connection()
     cursor = conn.cursor()
