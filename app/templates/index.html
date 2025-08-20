@@ -2,12 +2,13 @@
 
 {% block content %}
     {% for review in reviews %}
-    <div>
-        <h1>{{ review[2] }}</h1>
-        <p>Written by: {{ review[1] }}</p>
-        <p>{{ review[3] }}</p>
-        <p>{{ review[4] }} / 5</p>
+    <div class="reviews">
+        <div class="review", review_id="{{ review[0] }}">
+            <h1 class="plate"><span><a href="{{ url_for('plates', plate=review[2]) }}">{{ (review[2][:4]+" "+review[2][4:]).upper() }}</a></span></h1>
+            <p>Written by: {{ review[1] }}</p>
+            <p>{{ review[3] }}</p>
+            <p>{{ review[4] }} / 5</p>
+        </div>
     </div>
-    <hr>
     {% endfor %}
 {% endblock %}

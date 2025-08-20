@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
+<header>
+    <link href="static/forms.css" rel="stylesheet">
+</header>
+
 {% block content %}
     <h1>Create a review</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.plate.label }}<br>
-            {{ form.plate(size=3) }}<br>
+            <span class="plate">{{ form.plate(size=7) }}</span><br>
             {% for error in form.plate.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

@@ -1,0 +1,88 @@
+body {
+  background-color: #d9d3d5;
+}
+
+/* Navbar */
+ul.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.navbar li {
+  float: left;
+  border-right: 1px solid #bbb;
+}
+
+ul.navbar li:last-child {
+  border-right: none;
+}
+
+ul.navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.navbar li a:hover {
+  background-color: #111;
+}
+
+/* Search Bar Form */
+form.search_bar li.search_input input{
+  background-color: #ffcc28;
+}
+
+form.search_bar li input{
+  border: 2px solid #000;
+  clear: both;
+  height: 100%;
+  font-size: 100%;
+  color: #000;
+  font-family: "UKPlate", Lucida Console, Monaco, monospace;
+  padding: 10px 16px;
+  border: 3px solid black;
+  border-radius: 3px;
+  text-align: center;
+  text-transform: uppercase;
+  align-items: center;
+}
+
+form.search_bar li input{
+  vertical-align: middle;
+}
+
+/* Page */
+.plate span {
+  background-color: #ffcc28;
+  border: 2px solid #000;
+  clear: both;
+  height: 38px;
+  font-size: 100%;
+  color: #000;
+  font-family: "UKPlate", Lucida Console, Monaco, monospace;
+  padding: 5px;
+  border: 3px solid black;
+  border-radius: 5px;
+}
+
+.plate span a {
+  color: black;
+  text-decoration: none;
+}
+
+div.review{
+  background-color: gray;
+  border: 3px solid black;
+  border-radius: 25px;
+  padding: 5px;
+}
+
+div.reviews {
+  width: 40%;
+  padding: 10px;
+}

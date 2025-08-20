@@ -6,6 +6,7 @@ from flask_login import UserMixin
 DB_PATH = 'app.db'
 
 
+
 def get_connection():
     conn = sqlite3.connect(DB_PATH)
     return conn
@@ -58,6 +59,7 @@ def create_db():
     ''')
 
     conn.commit()
+    conn.close()
 
 def add_user(username: str, email: str, password: str, permission_level: int = 1):
     conn = get_connection()
@@ -101,6 +103,8 @@ class User(UserMixin):
 
     def get_id(self):
         return self.id
+
+create_db()
 
 @login.user_loader
 def load_user(id):

@@ -2,25 +2,39 @@
 <html>
     <head>
         {% if title %}
-            <title>{{ title }} - Rate My Driving</title>
+            <title>{{ title }} | Rate Driving</title>
         {% else %}
-            <title>Rate My Driving</title>
+            <title>Rate Driving</title>
+        {% endif %}
+        <link href="static/global.css" rel="stylesheet">
+
+        {% if stylesheet %}
+            <link href="static/{{ stylesheet }}.css" rel="stylesheet">
         {% endif %}
     </head>
     <body>
-        <div>
-            Rate My Driving | 
-            <a href="{{ url_for('index') }}">Home</a> | 
+        <div class="navbar">
+            <ul class="navbar">
+                <li><a href="{{ url_for('index') }}">Rate My Driving</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('create_review') }}">Create</a></li>
+                <li style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('signup') }}">Signup</a></li>
+                {% endif %}
+                <form method="GET" action="{{ url_for('search') }}" class="search_bar">
+                    {{ search_form.hidden_tag() }}
+                    <li style="float:right">{{ search_form.submit() }}</li>
+                    <li style="float:right" class="search_input">
+                        {{ search_form.search_input(size=7) }}<br>
+                    </li>
+                </form>
+                
+            </ul>
 
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('logout') }}">Logout</a> | 
-            <a href="{{ url_for('create_review') }}">Create</a> | 
-            {% else %}
-            <a href="{{ url_for('login') }}">Login</a> | 
-            <a href="{{ url_for('signup') }}">Signup</a> | 
-            {% endif %}
-
-        </div><hr>
+        </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -30,12 +44,12 @@
         </ul>
         {% endif %}
         {% endwith %}
+
         {% block content %}{% endblock %}
         
-        <hr>
         <div>
+            <hr>
             <p>Website by Corley</p>
-
         </div>
     </body>
 </html>
